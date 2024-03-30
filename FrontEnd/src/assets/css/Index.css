@@ -1,0 +1,64 @@
+body {
+    background-color: rgb(228, 228, 228);
+}
+
+.border-left {
+    border-left: 2px solid rgb(192, 192, 192);
+}
+
+.searchCustomerDropdowns {
+    width: 40%;
+    position: absolute;
+    z-index: 1000;
+    /* Đảm bảo đè lên các phần tử khác */
+    background-color: white;
+    /* Màu nền */
+    border: 1px solid black;
+    /* Viền */
+    padding: 10px;
+    /* Khoảng cách bên trong */
+    /* Chiều cao tối đa */
+    /* Hiện thanh cuộn khi cần */
+    overflow-x: hidden;
+}
+
+.searchProductDropdowns{
+    width: 38.5%;
+    position: absolute;
+    z-index: 1000;
+    /* Đảm bảo đè lên các phần tử khác */
+    background-color: white;
+    /* Màu nền */
+    border: 1px solid black;
+    /* Viền */
+    padding: 10px;
+}
+
+.table-container {
+    max-height: 170px; /* Đặt chiều cao tối đa cho bảng */
+    overflow-y: auto; /* Hiện thanh cuộn khi cần */
+}
+
+.table-sticky thead {
+    position: sticky; /* Cố định vị trí */
+    top: 0; /* Nằm ở trên cùng */
+    z-index: 1; /* Đảm bảo phần thead luôn nằm trên cùng */
+    background-color: #fff; /* Định dạng màu nền */
+}
+
+.scroll-container {
+    max-height: 200px; /* Đặt chiều cao tối đa cho bảng */
+    overflow-y: auto; /* Hiện thanh cuộn khi cần */
+    overflow-x: hidden;
+}
+
+.col-product-container {
+    max-height: 160px; /* Đặt chiều cao tối đa cho bảng */
+    overflow-y: auto; /* Hiện thanh cuộn khi cần */
+    overflow-x: hidden;
+}
+
+
+.customUl {
+    list-style: none;
+}
