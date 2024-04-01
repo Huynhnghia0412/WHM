@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { IUser, IWareHouse } from '../../interfaces/Interfaces';
+import { IUser, IUserModel, IWareHouse } from '../../interfaces/Interfaces';
 import { ColDef } from 'ag-grid-community';
 import CustomButton from '../../components/CustomButton';
 import UsefulFunctions from './../../utilities/UsefulFunctions';
@@ -10,6 +10,8 @@ import { AgGridReact } from 'ag-grid-react';
 import Input from './../../components/Input';
 import Select from './../../components/Select';
 import UserServices from './../../services/User/UserServices';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const defaultWareHouse: IWareHouse = {
     id: 0,
@@ -20,6 +22,10 @@ const defaultWareHouse: IWareHouse = {
 
 
 const AllWareHouse = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [wareHouseList, setWareHouseList] = useState<IWareHouse[]>([]);
     const [employeeList, setEmployeeList] = useState<IUser[]>([]);
     const [wareHouse, setWareHouse] = useState<IWareHouse>(defaultWareHouse);
@@ -137,6 +143,21 @@ const AllWareHouse = () => {
         })
     }
 
+    const ModalHeight = () => {
+        if (userData.modifyWarehouse !== "True") {
+            return '420px';
+        } else {
+            return '360px';
+        }
+    }
+    const DelModalHeight = () => {
+        if (userData.modifyWarehouse !== "True") {
+            return '280px';
+        } else {
+            return '220px';
+        }
+    }
+
     return (
         <div className='bg-white p-3'>
             <div className="row">
@@ -165,7 +186,7 @@ const AllWareHouse = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '360px',
+                        height: ModalHeight(),
                         left: '35%',
                     },
                 }}
@@ -178,6 +199,11 @@ const AllWareHouse = () => {
                     </div>
                     <div className="modal-body py-4">
                         <div className="container">
+                            {userData.modifyWarehouse !== "True" ? (<>
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền chỉnh sửa, thêm
+                                </div>
+                            </>) : null}
                             <div className="row">
                                 <div className="col">
                                     <Input
@@ -210,20 +236,22 @@ const AllWareHouse = () => {
                     </div>
                     <div className="modal-footer border-top pt-3">
                         <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseModal}>Đóng</button>
-                        {wareHouse.id !== 0 ?
-                            <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
-                                onClick={() => updateWareHouse(wareHouse.id,
-                                    wareHouse?.name || '',
-                                    wareHouse?.userId || '')}
-                            >Lưu</button>
-                            :
-                            <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
-                                onClick={() =>
-                                    addWareHouse(
+                        {userData.modifyCustomer === "True" ? (<>
+                            {wareHouse.id !== 0 ?
+                                <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
+                                    onClick={() => updateWareHouse(wareHouse.id,
                                         wareHouse?.name || '',
                                         wareHouse?.userId || '')}
-                            >Tạo</button>
-                        }
+                                >Lưu</button>
+                                :
+                                <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
+                                    onClick={() =>
+                                        addWareHouse(
+                                            wareHouse?.name || '',
+                                            wareHouse?.userId || '')}
+                                >Tạo</button>
+                            }
+                        </>) : null}
                     </div>
                 </div>
             </Modal>
@@ -235,25 +263,44 @@ const AllWareHouse = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '220px',
+                        height: DelModalHeight(),
                         left: '35%',
                     },
                 }}
                 ariaHideApp={false}
             >
-                <div>
-                    <div className="modal-header border-bottom pb-3">
-                        <h1 className="modal-title fs-5">Xóa</h1>
-                        <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                {userData.modifyWarehouse === "True" ? (<>
+                    <div>
+                        <div className="modal-header border-bottom pb-3">
+                            <h1 className="modal-title fs-5">Xóa</h1>
+                            <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body py-4">
+                            Bạn có chắc muốn xóa <span className='fw-bold'>{wareHouse.name}</span>
+                        </div>
+                        <div className="modal-footer border-top pt-3">
+                            <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            <button onClick={() => deleteWareHouse(wareHouse.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
+                        </div>
                     </div>
-                    <div className="modal-body py-4">
-                        Bạn có chắc muốn xóa kho <span className='fw-bold'>{wareHouse.name}</span>
-                    </div>
-                    <div className="modal-footer border-top pt-3">
-                        <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
-                        <button onClick={() => deleteWareHouse(wareHouse.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
-                    </div>
-                </div>
+                </>) :
+                    (
+                        <div>
+                            <div className="modal-header border-bottom pb-3">
+                                <h1 className="modal-title fs-5">Xóa</h1>
+                                <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền xóa loại hàng
+                                </div>
+                            </div>
+                            <div className="modal-footer border-top pt-3">
+                                <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            </div>
+                        </div>
+                    )
+                }
             </Modal>
         </div>
     );

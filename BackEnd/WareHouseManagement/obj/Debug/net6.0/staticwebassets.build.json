@@ -1,11 +1,37 @@
 {
   "Version": 1,
-  "Hash": "YARK+Ta7HWXm0NEFS7dmdXUOcNvI+XC73fW+GI5KFXA=",
+  "Hash": "NWbuLCihJQX5psdAx6EsUe/qRttdGF4jJiEqySdOzV0=",
   "Source": "WareHouseManagement",
   "BasePath": "_content/WareHouseManagement",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "WareHouseManagement\\wwwroot",
+      "Source": "WareHouseManagement",
+      "ContentRoot": "D:\\HOC\\HK6\\CNPM\\Final-Project\\WM\\BackEnd\\WareHouseManagement\\wwwroot\\",
+      "BasePath": "_content/WareHouseManagement",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\HOC\\HK6\\CNPM\\Final-Project\\WM\\BackEnd\\WareHouseManagement\\wwwroot\\Images\\LogoMailBody.png",
+      "SourceId": "WareHouseManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\HOC\\HK6\\CNPM\\Final-Project\\WM\\BackEnd\\WareHouseManagement\\wwwroot\\",
+      "BasePath": "_content/WareHouseManagement",
+      "RelativePath": "Images/LogoMailBody.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\LogoMailBody.png"
+    }
+  ]
 }

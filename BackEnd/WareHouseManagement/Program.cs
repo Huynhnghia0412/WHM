@@ -25,6 +25,9 @@ using WareHouseManagement.Services.Note.Interfaces;
 using WareHouseManagement.Services.Note;
 using WareHouseManagement.Services.Report.Interfaces;
 using WareHouseManagement.Services.Report;
+using WareHouseManagement.Utilities;
+using WareHouseManagement.Services.Auth.Interfaces;
+using WareHouseManagement.Services.Auth;
 
 namespace WareHouseManagement
 {
@@ -97,6 +100,7 @@ namespace WareHouseManagement
 			});
 
 			//truyền dữ liệu từ appsetting vào trong lớp MailSettings theo đúng tên các thuộc tính.
+			builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 			//config authentication
 			var key = builder.Configuration.GetValue<string>("ApiSettings:SecretKey");
@@ -130,6 +134,9 @@ namespace WareHouseManagement
 			builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 			builder.Services.AddScoped<INoteServices, NoteServices>();
 			builder.Services.AddScoped<IReportServices, ReportServices>();
+			builder.Services.AddScoped<IAuthService, AuthService>();
+			builder.Services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
+			builder.Services.AddScoped<IMailService, MailService>();
 
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();

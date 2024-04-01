@@ -7,6 +7,7 @@ using WareHouseManagement.Models;
 using WareHouseManagement.Models.DTO.User;
 using WareHouseManagement.Models.Response;
 using WareHouseManagement.Services.User.Interfaces;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Services.User
 {
@@ -353,12 +354,8 @@ namespace WareHouseManagement.Services.User
 				await _userManager.AddToRoleAsync(newUser, role.Name);
 			}
 
-			// Thêm các claim cho người dùng mới
-			foreach (var claimDto in model.Claims)
-			{
-				var claim = new Claim(claimDto.ClaimType, claimDto.ClaimValue);
-				await _userManager.AddClaimAsync(newUser, claim);
-			}
+			// Thêm claims cho người dùng
+			UserClaim.AddClaimsToUser(newUser, _userManager, model.Claims);
 
 			_res.Messages = "Thêm người dùng thành công";
 			return _res;
@@ -455,19 +452,8 @@ namespace WareHouseManagement.Services.User
 
 			}
 
-			// Xóa tất cả các claim của user
-			var existingClaims = await _userManager.GetClaimsAsync(userToUpdate);
-			foreach (var claim in existingClaims)
-			{
-				await _userManager.RemoveClaimAsync(userToUpdate, claim);
-			}
-
-			// Thêm các claim cho người dùng mới
-			foreach (var claimDto in model.Claims)
-			{
-				var claim = new Claim(claimDto.ClaimType, claimDto.ClaimValue);
-				await _userManager.AddClaimAsync(userToUpdate, claim);
-			}
+			// Cập nhật claims cho người dùng
+			UserClaim.UpdateClaimsToUser(userToUpdate, _userManager, model.Claims);
 
 			_res.Messages = "Cập nhật người dùng thành công";
 			return _res;

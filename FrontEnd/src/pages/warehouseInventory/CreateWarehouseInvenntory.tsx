@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { IItem, IProduct, IRequestInOutNote } from '../../interfaces/Interfaces';
+import { IItem, IProduct, IRequestInOutNote, IUserModel } from '../../interfaces/Interfaces';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
@@ -13,14 +13,20 @@ import CheckInventoryServices from './../../services/CheckInventory/CheckInvento
 import InOutServices from './../../services/InOut/InOutServices';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { defaultNote } from '../../utilities/DefaultObject';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const CreateWarehouseInvenntory = () => {
     const location = useLocation();
     const { state } = location || {};
     const { id } = state || {};
     const [isAdd, setIsAdd] = useState<boolean>(true);
+    //userData
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
 
-    const [userId, setUserId] = useState<string>('d59592ed-14c6-430d-bcca-3c5554bdada9');
+    const [userId, setUserId] = useState<string>(userData.id);
     const [productList, setProductList] = useState<IProduct[]>([]);
     const [rowData, setRowData] = useState<IProduct[]>([]);
     const [note, setNote] = useState<IRequestInOutNote>(defaultNote);

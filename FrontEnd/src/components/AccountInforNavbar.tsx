@@ -13,7 +13,7 @@ const AccountInforNavbar = () => {
                         <Link to={"/accountInfor"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Thông tin</Link>
                     </div>
                     <div className='border border-top-0 border bg-white navbar-hover'>
-                        <Link to={"/resetPassword"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Đổi mật khẩu</Link>
+                        <Link to={"/changePassword"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Đổi mật khẩu</Link>
                     </div>
                 </div>
             </div>

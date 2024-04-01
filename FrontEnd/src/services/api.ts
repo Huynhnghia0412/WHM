@@ -6,7 +6,8 @@ const url = {
   baseUrl: "https://localhost:7153/api",
   // auth
   login: "Auth/Login",
-  register: "Auth/Register",
+  sendEmail: "ForgotPassword/SendEmail",
+  changePassword: "ForgotPassword/ChangePassword",
 
   //warehouse
   getWarehouses: "Warehouse/GetWarehouses",

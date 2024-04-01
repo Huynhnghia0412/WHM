@@ -4,7 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import CustomButton from '../../components/CustomButton';
-import { IRole, IUser, IUserClaims } from './../../interfaces/Interfaces';
+import { IRole, IUser, IUserClaims, IUserModel } from './../../interfaces/Interfaces';
 import Modal from 'react-modal';
 import Input from '../../components/Input';
 import inputHelper from '../../helper/InputHelper';
@@ -13,8 +13,14 @@ import { defaultRole, defaultUser } from '../../utilities/DefaultObject';
 import Checkbox from './../../components/CheckBox/CheckBox';
 import Select from './../../components/Select';
 import CustomUserButton from './../../components/CustomUserButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const UserManagement = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [userList, setUserList] = useState<IUser[]>([]);
     const [roleList, setRoleList] = useState<IRole[]>([]);
     const [user, setUser] = useState<IUser>(defaultUser);
@@ -30,7 +36,6 @@ const UserManagement = () => {
     const [emailError, setEmailError] = useState<string>('');
     const [roleIdError, setRoleIdError] = useState<string>('');
     const [userIdError, setUserIdError] = useState<string>('');
-
     useEffect(() => {
         UserServices.getEmployees().then((res) => {
             if (res.isSuccess) {
@@ -43,6 +48,8 @@ const UserManagement = () => {
             }
         })
     }, [isModalOpen, isDelModalOpen]);
+
+    console.log(userData)
 
     useEffect(() => {
         setRowData(userList.map(user => ({ ...user })));
@@ -151,8 +158,10 @@ const UserManagement = () => {
 
     // Tạo một danh sách các checkbox dựa trên dữ liệu từ danh sách đã cho
     const checkboxes = [
-        { label: 'Xem chứng từ kho', name: 'readWarehouse' },
-        { label: 'Thêm sửa xóa chứng từ kho', name: 'modifyWarehouse' },
+        { label: 'Xem chứng từ kho', name: 'readInOutNote' },
+        { label: 'Thêm sửa xóa chứng từ kho', name: 'modifyInOutNote' },
+        { label: 'Xem kho', name: 'readWarehouse' },
+        { label: 'Thêm sửa xóa kho', name: 'modifyWarehouse' },
         { label: 'Xem hàng hóa', name: 'readProduct' },
         { label: 'Thêm sửa xóa hàng hóa', name: 'modifyProduct' },
         { label: 'Xem loại hàng hóa', name: 'readProductType' },

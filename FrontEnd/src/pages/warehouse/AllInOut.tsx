@@ -4,15 +4,20 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import CustomButton from '../../components/CustomButton';
-import { IRequestInOutNote } from '../../interfaces/Interfaces';
+import { IRequestInOutNote, IUserModel } from '../../interfaces/Interfaces';
 import InOutServices from './../../services/InOut/InOutServices';
-import { IItem } from './../../interfaces/Interfaces';
 import TotalCustom from './../../components/TotalCustom';
 import ALLInOutCustomButton from './../../components/ALLInOutCustomButton';
 import Modal from 'react-modal';
 import { defaultNote } from '../../utilities/DefaultObject';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const AllInOut = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [noteList, setNoteList] = useState<IRequestInOutNote[]>([]);
     const [note, setNote] = useState<IRequestInOutNote>(defaultNote);
     const [rowData, setRowData] = useState<IRequestInOutNote[]>([]);
@@ -49,6 +54,7 @@ const AllInOut = () => {
             cellRenderer: ALLInOutCustomButton,
             cellRendererParams: (params: any) => ({
                 data: params.data,
+                userData: userData,
                 handleOpenModalToDel: handleOpenModalToDel,
             }),
         },

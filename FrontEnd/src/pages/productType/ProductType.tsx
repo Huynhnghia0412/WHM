@@ -4,12 +4,14 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import CustomButton from '../../components/CustomButton';
-import { IProductType } from './../../interfaces/Interfaces';
+import { IProductType, IUserModel } from './../../interfaces/Interfaces';
 import Input from './../../components/Input';
 import Modal from 'react-modal';
 import inputHelper from '../../helper/InputHelper';
 import ProductTypeServices from '../../services/ProductType/ProductTypeServices';
 import UsefulFunctions from './../../utilities/UsefulFunctions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const defaultProductType: IProductType = {
     id: 0,
@@ -19,6 +21,10 @@ const defaultProductType: IProductType = {
 };
 
 const ProductType = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [productTypeList, setProductTypeList] = useState<IProductType[]>([]);
     const [productType, setProductType] = useState<IProductType>(defaultProductType);
     const [rowData, setRowData] = useState<IProductType[]>([]);
@@ -128,6 +134,21 @@ const ProductType = () => {
         })
     }
 
+    const ModalHeight = () => {
+        if (userData.modifyProductType !== "True") {
+            return '400px';
+        } else {
+            return '360px';
+        }
+    }
+    const DelModalHeight = () => {
+        if (userData.modifyProductType !== "True") {
+            return '280px';
+        } else {
+            return '240px';
+        }
+    }
+
     return (
         <div className='bg-white p-3'>
             <div className="row">
@@ -156,8 +177,8 @@ const ProductType = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '360px',
-                        left: '35%',
+                        height: ModalHeight(),
+                        left: '31%',
                     },
                 }}
                 ariaHideApp={false}
@@ -169,6 +190,11 @@ const ProductType = () => {
                     </div>
                     <div className="modal-body py-4">
                         <div className="container">
+                            {userData.modifyProductType !== "True" ? (<>
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền chỉnh sửa, thêm
+                                </div>
+                            </>) : null}
                             <div className="row">
                                 <div className="col-4">
                                     <Input
@@ -209,21 +235,23 @@ const ProductType = () => {
                     </div>
                     <div className="modal-footer border-top pt-3">
                         <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseModal}>Đóng</button>
-                        {productType.id !== 0 ?
-                            <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
-                                onClick={() => updateProductType(productType.id,
-                                    productType?.productTypeCode || '',
-                                    productType?.name || '',
-                                    productType?.detail || '')}
-                            >Lưu</button>
-                            :
-                            <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
-                                onClick={() =>
-                                    addProductType(productType?.productTypeCode || '',
+                        {userData.modifyProductType === "True" ? (<>
+                            {productType.id !== 0 ?
+                                <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
+                                    onClick={() => updateProductType(productType.id,
+                                        productType?.productTypeCode || '',
                                         productType?.name || '',
                                         productType?.detail || '')}
-                            >Tạo</button>
-                        }
+                                >Lưu</button>
+                                :
+                                <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
+                                    onClick={() =>
+                                        addProductType(productType?.productTypeCode || '',
+                                            productType?.name || '',
+                                            productType?.detail || '')}
+                                >Tạo</button>
+                            }
+                        </>) : null}
                     </div>
                 </div>
             </Modal>
@@ -235,25 +263,44 @@ const ProductType = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '220px',
+                        height: DelModalHeight(),
                         left: '35%',
                     },
                 }}
                 ariaHideApp={false}
             >
-                <div>
-                    <div className="modal-header border-bottom pb-3">
-                        <h1 className="modal-title fs-5">Xóa</h1>
-                        <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                {userData.modifyProductType === "True" ? (<>
+                    <div>
+                        <div className="modal-header border-bottom pb-3">
+                            <h1 className="modal-title fs-5">Xóa</h1>
+                            <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body py-4">
+                            Bạn có chắc muốn xóa <span className='fw-bold'>{productType.name}</span>
+                        </div>
+                        <div className="modal-footer border-top pt-3">
+                            <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            <button onClick={() => deleteProductType(productType.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
+                        </div>
                     </div>
-                    <div className="modal-body py-4">
-                        Bạn có chắc muốn xóa <span className='fw-bold'>{productType.name}</span>
-                    </div>
-                    <div className="modal-footer border-top pt-3">
-                        <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
-                        <button onClick={() => deleteProductType(productType.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
-                    </div>
-                </div>
+                </>) :
+                    (
+                        <div>
+                            <div className="modal-header border-bottom pb-3">
+                                <h1 className="modal-title fs-5">Xóa</h1>
+                                <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền xóa loại hàng
+                                </div>
+                            </div>
+                            <div className="modal-footer border-top pt-3">
+                                <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            </div>
+                        </div>
+                    )
+                }
             </Modal>
         </div>
     );

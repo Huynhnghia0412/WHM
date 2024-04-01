@@ -5,7 +5,7 @@
 /FrontEnd/.pnp
 /FrontEnd/.pnp.js
 /BackEnd/WareHouseManagement/bin
-/BackEnd/WareHouseManagement/.appsettings.json
+/BackEnd/WareHouseManagement/appsettings.json
 # testing
 /coverage
 

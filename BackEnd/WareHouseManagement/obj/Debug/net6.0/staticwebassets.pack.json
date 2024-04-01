@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\HOC\\HK6\\CNPM\\Final-Project\\WM\\BackEnd\\WareHouseManagement\\wwwroot\\Images\\LogoMailBody.png",
+      "PackagePath": "staticwebassets\\Images\\LogoMailBody.png"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.WareHouseManagement.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.WareHouseManagement.props",
+      "PackagePath": "build\\WareHouseManagement.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.WareHouseManagement.props",
+      "PackagePath": "buildMultiTargeting\\WareHouseManagement.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.WareHouseManagement.props",
+      "PackagePath": "buildTransitive\\WareHouseManagement.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Attributes
 {
@@ -23,15 +25,25 @@ namespace WareHouseManagement.Attributes
 				return;
 			}
 
-			// Kiểm tra xem người dùng có claim tương ứng không, và Value khác 
-			var userClaim = user.Claims.FirstOrDefault(c => c.Type == _claimType && (c.Value.Equals("False") || c.Value.Equals("false")));
+			// lấy roleclaim từ token
+			var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-			// Nếu có user claim tương ứng
-			if (userClaim != null)
+			if (string.IsNullOrEmpty(roleClaim))
 			{
-				// Từ chối truy cập vì có 1 claim có giá trị False
 				context.Result = new ForbidResult();
 				return;
+			}
+
+			// kiểm tra có phải admin
+			if (!roleClaim.Equals(SD.Role_Admin))
+			{
+				var claimInToken = user.Claims.FirstOrDefault(c => c.Type == _claimType && c.Value == "True");
+
+				if (claimInToken == null)
+				{
+					context.Result = new ForbidResult();
+					return;
+				}
 			}
 		}
 	}

@@ -85,3 +85,4 @@ D:\HOC\HK6\CNPM\Final-Project\WM\BackEnd\WareHouseManagement\obj\Debug\net6.0\re
 D:\HOC\HK6\CNPM\Final-Project\WM\BackEnd\WareHouseManagement\obj\Debug\net6.0\WareHouseManagement.pdb
 D:\HOC\HK6\CNPM\Final-Project\WM\BackEnd\WareHouseManagement\obj\Debug\net6.0\WareHouseManagement.genruntimeconfig.cache
 D:\HOC\HK6\CNPM\Final-Project\WM\BackEnd\WareHouseManagement\obj\Debug\net6.0\ref\WareHouseManagement.dll
+D:\HOC\HK6\CNPM\Final-Project\WM\BackEnd\WareHouseManagement\bin\Debug\net6.0\WareHouseManagement.staticwebassets.runtime.json

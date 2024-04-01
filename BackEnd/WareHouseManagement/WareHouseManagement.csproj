@@ -25,8 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Auth\" />
-    <Folder Include="Services\Auth\" />
+    <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
 </Project>

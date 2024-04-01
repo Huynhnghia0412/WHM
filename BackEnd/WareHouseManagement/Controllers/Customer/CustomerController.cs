@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WareHouseManagement.Attributes;
 using WareHouseManagement.Models.DTO.Customer;
 using WareHouseManagement.Services.Customer.Interafaces;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Controllers.Customer
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class CustomerController : ControllerBase
 	{
 		private readonly ICustomerServices _customer;
@@ -16,6 +20,7 @@ namespace WareHouseManagement.Controllers.Customer
 		}
 
 		[HttpGet("GetCustomers")]
+		[AuthorizeClaim(SD.Claim_ReadCustomer)]
 		public async Task<IActionResult> GetCustomers()
 		{
 			var result = await _customer.GetCustomers();
@@ -31,6 +36,7 @@ namespace WareHouseManagement.Controllers.Customer
 		}
 
 		[HttpPost("AddCustomer")]
+		[AuthorizeClaim(SD.Claim_ModifyCustomer)]
 		public async Task<IActionResult> AddCustomer([FromBody] AddOrUpdateCustomerResponseDTO model)
 		{
 			var result = await _customer.AddCustomer(model);
@@ -46,6 +52,7 @@ namespace WareHouseManagement.Controllers.Customer
 		}
 
 		[HttpPut("UpdateCustomer/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyCustomer)]
 		public async Task<IActionResult> UpdateCustomer(int id, [FromBody] AddOrUpdateCustomerResponseDTO model)
 		{
 			var result = await _customer.UpdateCustomer(id, model);
@@ -61,6 +68,7 @@ namespace WareHouseManagement.Controllers.Customer
 		}
 
 		[HttpDelete("DeleteCustomer/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyCustomer)]
 		public async Task<IActionResult> DeleteCustomer(int id)
 		{
 			var result = await _customer.DeleteCustomer(id);

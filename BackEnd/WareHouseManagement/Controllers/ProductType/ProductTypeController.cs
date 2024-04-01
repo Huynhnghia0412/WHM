@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WareHouseManagement.Attributes;
 using WareHouseManagement.Models.DTO.ProductType;
 using WareHouseManagement.Services.ProductType.Interfaces;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Controllers.ProductType
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class ProductTypeController : ControllerBase
 	{
 		private readonly IProductTypeServices _productType;
@@ -17,6 +21,7 @@ namespace WareHouseManagement.Controllers.ProductType
 		}
 
 		[HttpGet("GetProductTypes")]
+		[AuthorizeClaim(SD.Claim_ReadProductType)]
 		public async Task<IActionResult> GetProductTypes()
 		{
 			var result = await _productType.GetProductTypes();
@@ -32,6 +37,7 @@ namespace WareHouseManagement.Controllers.ProductType
 		}
 
 		[HttpPost("AddProductType")]
+		[AuthorizeClaim(SD.Claim_ModifyProductType)]
 		public async Task<IActionResult> AddProductType([FromBody] AddOrUpdateProductTypeRequestDTO model)
 		{
 			var result = await _productType.AddProductType(model);
@@ -47,6 +53,7 @@ namespace WareHouseManagement.Controllers.ProductType
 		}
 
 		[HttpPut("UpdateProductType/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyProductType)]
 		public async Task<IActionResult> UpdateProductType(int id, [FromBody] AddOrUpdateProductTypeRequestDTO model)
 		{
 			var result = await _productType.UpdateProductType(id, model);
@@ -62,6 +69,7 @@ namespace WareHouseManagement.Controllers.ProductType
 		}
 
 		[HttpDelete("DeleteProductType/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyProductType)]
 		public async Task<IActionResult> DeleteProductType(int id)
 		{
 			var result = await _productType.DeleteProductType(id);

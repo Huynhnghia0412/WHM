@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { IProduct } from '../../interfaces/Interfaces';
+import { IProduct, IUserModel } from '../../interfaces/Interfaces';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
@@ -12,9 +12,14 @@ import ProductServices from '../../services/Product/ProductServices';
 import { IProductType } from './../../interfaces/Interfaces';
 import UsefulFunctions from './../../utilities/UsefulFunctions';
 import { defaultProduct } from '../../utilities/DefaultObject';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const Product = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [productList, setProductList] = useState<IProduct[]>([]);
     const [productTypeList, setProductTypeList] = useState<IProductType[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -143,6 +148,21 @@ const Product = () => {
         })
     }
 
+    const ModalHeight = () => {
+        if (userData.modifyCustomer !== "True") {
+            return '650px';
+        } else {
+            return '600px';
+        }
+    }
+    const DelModalHeight = () => {
+        if (userData.modifyProductType !== "True") {
+            return '280px';
+        } else {
+            return '240px';
+        }
+    }
+
     return (
         <div className='bg-white p-3'>
             <div className="row">
@@ -170,8 +190,8 @@ const Product = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '630px',
-                        left: '35%',
+                        height: ModalHeight(),
+                        left: '30%',
                     },
                 }}
                 ariaHideApp={false}
@@ -183,6 +203,11 @@ const Product = () => {
                     </div>
                     <div className="modal-body py-4">
                         <div className="container">
+                            {userData.modifyProduct !== "True" ? (<>
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền chỉnh sửa, thêm
+                                </div>
+                            </>) : null}
                             <div className="row">
                                 <div className="col-4">
                                     <Input
@@ -279,30 +304,33 @@ const Product = () => {
                     </div>
                     <div className="modal-footer border-top pt-3">
                         <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseModal}>Đóng</button>
-                        {product?.id !== 0 ?
-                            <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
-                                onClick={() =>
-                                    updateProduct(product?.id || 0,
-                                        product?.productCode || '',
-                                        product?.name || '',
-                                        product?.status || '',
-                                        product?.price || 0,
-                                        product?.unit || '',
-                                        product?.des || '',
-                                        product?.productTypeId || 0)}
-                            >Lưu</button>
-                            :
-                            <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
-                                onClick={() =>
-                                    addProduct(product?.productCode || '',
-                                        product?.name || '',
-                                        product?.status || '',
-                                        product?.price || 0,
-                                        product?.unit || '',
-                                        product?.des || '',
-                                        product?.productTypeId || 0)}
-                            >Tạo</button>
-                        }
+                        {userData.modifyProduct === "True" ? (<>
+                            {product?.id !== 0 ?
+                                <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
+                                    onClick={() =>
+                                        updateProduct(product?.id || 0,
+                                            product?.productCode || '',
+                                            product?.name || '',
+                                            product?.status || '',
+                                            product?.price || 0,
+                                            product?.unit || '',
+                                            product?.des || '',
+                                            product?.productTypeId || 0)}
+                                >Lưu</button>
+                                :
+                                <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
+                                    onClick={() =>
+                                        addProduct(product?.productCode || '',
+                                            product?.name || '',
+                                            product?.status || '',
+                                            product?.price || 0,
+                                            product?.unit || '',
+                                            product?.des || '',
+                                            product?.productTypeId || 0)}
+                                >Tạo</button>
+                            }
+                        </>) : null}
+
                     </div>
                 </div>
             </Modal>
@@ -314,25 +342,44 @@ const Product = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '220px',
+                        height: DelModalHeight(),
                         left: '35%',
                     },
                 }}
                 ariaHideApp={false}
             >
-                <div>
-                    <div className="modal-header border-bottom pb-3">
-                        <h1 className="modal-title fs-5">Xóa</h1>
-                        <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                {userData.modifyProduct === "True" ? (<>
+                    <div>
+                        <div className="modal-header border-bottom pb-3">
+                            <h1 className="modal-title fs-5">Xóa</h1>
+                            <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body py-4">
+                            Bạn có chắc muốn xóa <span className='fw-bold'>{product.name}</span>
+                        </div>
+                        <div className="modal-footer border-top pt-3">
+                            <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            <button onClick={() => deleteProduct(product.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
+                        </div>
                     </div>
-                    <div className="modal-body py-4">
-                        Bạn có chắc muốn xóa <span className='fw-bold'>{product.name}</span>
-                    </div>
-                    <div className="modal-footer border-top pt-3">
-                        <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
-                        <button onClick={() => deleteProduct(product.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
-                    </div>
-                </div>
+                </>) :
+                    (
+                        <div>
+                            <div className="modal-header border-bottom pb-3">
+                                <h1 className="modal-title fs-5">Xóa</h1>
+                                <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền xóa hàng hóa
+                                </div>
+                            </div>
+                            <div className="modal-footer border-top pt-3">
+                                <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            </div>
+                        </div>
+                    )
+                }
             </Modal>
         </div>
     );

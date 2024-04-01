@@ -8,14 +8,18 @@ import "./assets/css/Borders.css"
 import "./assets/css/Fs.css"
 import "./assets/css/Header.css"
 import "./assets/css/Navbar.css"
+import { Provider } from 'react-redux';
+import { store } from './storage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+  <Provider store={store}>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  </Provider>
 );

@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WareHouseManagement.Attributes;
 using WareHouseManagement.Models.DTO.WH;
 using WareHouseManagement.Services.WareHouse.Interfaces;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Controllers.WareHouse
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class WareHouseController : ControllerBase
 	{
 		private readonly IWareHouseServices _wareHouse;
@@ -16,6 +20,7 @@ namespace WareHouseManagement.Controllers.WareHouse
 		}
 
 		[HttpGet("GetWareHouses")]
+		[AuthorizeClaim(SD.Claim_ReadWarehouse)]
 		public async Task<IActionResult> GetWareHouses()
 		{
 			var result = await _wareHouse.GetWareHouses();
@@ -31,6 +36,7 @@ namespace WareHouseManagement.Controllers.WareHouse
 		}
 
 		[HttpPost("AddWareHouse")]
+		[AuthorizeClaim(SD.Claim_ModifyWarehouse)]
 		public async Task<IActionResult> AddWareHouse([FromBody] AddOrUpdateWareHouseRequestDTO model)
 		{
 			var result = await _wareHouse.AddWareHouse(model);
@@ -46,6 +52,7 @@ namespace WareHouseManagement.Controllers.WareHouse
 		}
 
 		[HttpPut("UpdateWareHouse/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyWarehouse)]
 		public async Task<IActionResult> UpdateProductType(int id, [FromBody] AddOrUpdateWareHouseRequestDTO model)
 		{
 			var result = await _wareHouse.UpdateWareHouse(id, model);
@@ -61,6 +68,7 @@ namespace WareHouseManagement.Controllers.WareHouse
 		}
 
 		[HttpDelete("DeleteWareHouse/{id}")]
+		[AuthorizeClaim(SD.Claim_ModifyWarehouse)]
 		public async Task<IActionResult> DeleteProductType(int id)
 		{
 			var result = await _wareHouse.DeleteWareHouse(id);

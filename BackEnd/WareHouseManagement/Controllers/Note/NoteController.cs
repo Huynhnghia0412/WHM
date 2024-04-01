@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WareHouseManagement.Attributes;
 using WareHouseManagement.Models.DTO.Note;
 using WareHouseManagement.Services.Note.Interfaces;
+using WareHouseManagement.Utilities;
 
 namespace WareHouseManagement.Controllers.Note
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize]
 	public class NoteController : ControllerBase
 	{
 		private readonly INoteServices _note;
@@ -16,6 +20,7 @@ namespace WareHouseManagement.Controllers.Note
 
 
 		[HttpGet("GetInOutNotes")]
+		[AuthorizeClaim(SD.Claim_ReadInOutNote)]
 		public async Task<IActionResult> GetInOutNotes()
 		{
 			var result = await _note.GetInOutNotesAsync();
@@ -31,6 +36,7 @@ namespace WareHouseManagement.Controllers.Note
 		}
 
 		[HttpGet("GetInventoryNotes")]
+		[AuthorizeClaim(SD.Claim_ReadCheckInventory)]
 		public async Task<IActionResult> GetInventoryNotes()
 		{
 			var result = await _note.GetInventoryNotesAsync();

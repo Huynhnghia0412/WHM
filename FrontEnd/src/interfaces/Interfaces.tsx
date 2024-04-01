@@ -131,8 +131,8 @@ export interface IRequestInOutNote {
 }
 
 export interface ILogin {
-    userName: string;
-    passWord: string;
+    username: string;
+    password: string;
 }
 
 //report request
@@ -152,6 +152,26 @@ export interface ICustomerRevenueReportRequest {
     customerId: number;
     fromDate: Date;
     toDate: Date;
+}
+
+
+export interface IUserModel {
+    fullName: string,
+    id: string,
+    email: string,
+    role: string,
+    readInOutNote: string;
+    modifyInOutNote: string;
+    readWarehouse: string;
+    modifyWarehouse: string;
+    readProduct: string;
+    modifyProduct: string;
+    readProductType: string;
+    modifyProductType: string;
+    readCheckInventory: string;
+    modifyCheckInventory: string;
+    readCustomer: string;
+    modifyCustomer: string;
 }
 
 

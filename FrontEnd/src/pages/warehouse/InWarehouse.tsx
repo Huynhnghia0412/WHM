@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import DisplaySearchCustomerDropdowns from '../../components/inWarehouse/DisplaySearchCustomerDropdowns';
 import Input from './../../components/Input';
 import inputHelper from '../../helper/InputHelper';
-import { ICustomer, IRequestInOutNote, IProduct, IItem, IWareHouse } from './../../interfaces/Interfaces';
+import { ICustomer, IRequestInOutNote, IProduct, IItem, IWareHouse, IUserModel } from './../../interfaces/Interfaces';
 import CustomerServices from './../../services/Customer/CustomerServices';
 import ProductServices from '../../services/Product/ProductServices';
 import DisplaySearchProductDropdowns from '../../components/inWarehouse/DisplaySearchProductDropdowns';
@@ -12,14 +12,21 @@ import WareHouseServices from '../../services/WareHouse/WareHouseServices';
 import Select from './../../components/Select';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { defaultItem, defaultNote } from '../../utilities/DefaultObject';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const InWarehouse = () => {
     const location = useLocation();
     const { state } = location || {};
     const { id } = state || {};
+    //userData
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
     const [isAdd, setIsAdd] = useState<boolean>(true);
 
-    const [userId, setUserId] = useState<string>('d59592ed-14c6-430d-bcca-3c5554bdada9');
+    const [userId, setUserId] = useState<string>(userData.id);
     const [note, setNote] = useState<IRequestInOutNote>(defaultNote);
     const [customerList, setCustomerList] = useState<ICustomer[]>([]);
     const [customer, setCustomer] = useState<ICustomer>();

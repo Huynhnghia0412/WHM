@@ -4,12 +4,14 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import CustomButton from '../../components/CustomButton';
-import { ICustomer } from './../../interfaces/Interfaces';
+import { ICustomer, IUserModel } from './../../interfaces/Interfaces';
 import Input from './../../components/Input';
 import Modal from 'react-modal';
 import inputHelper from '../../helper/InputHelper';
 import CustomerServices from './../../services/Customer/CustomerServices';
 import UsefulFunctions from './../../utilities/UsefulFunctions';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../storage/Redux/store';
 
 const defaultCustomer: ICustomer = {
     id: 0,
@@ -22,6 +24,11 @@ const defaultCustomer: ICustomer = {
 };
 
 const AllCustomer = () => {
+    const userData: IUserModel = useSelector(
+        (state: RootState) => state.userAuthStore
+    );
+
+
     const [customerList, setCustomerList] = useState<ICustomer[]>([]);
     const [customer, setCustomer] = useState<ICustomer>(defaultCustomer);
     const [rowData, setRowData] = useState<ICustomer[]>([]);
@@ -140,6 +147,21 @@ const AllCustomer = () => {
         })
     }
 
+    const ModalHeight = () => {
+        if (userData.modifyCustomer !== "True") {
+            return '550px';
+        } else {
+            return '500px';
+        }
+    }
+    const DelModalHeight = () => {
+        if (userData.modifyProductType !== "True") {
+            return '280px';
+        } else {
+            return '240px';
+        }
+    }
+
     return (
         <section>
             <div className='bg-white p-3'>
@@ -173,8 +195,8 @@ const AllCustomer = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '500px',
-                        left: '35%',
+                        height: ModalHeight(),
+                        left: '30%',
                     },
                 }}
                 ariaHideApp={false}
@@ -186,6 +208,11 @@ const AllCustomer = () => {
                     </div>
                     <div className="modal-body py-4">
                         <div className="container">
+                            {userData.modifyCustomer !== "True" ? (<>
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền chỉnh sửa, thêm
+                                </div>
+                            </>) : null}
                             <div className="row">
                                 <div className="col-4">
                                     <Input
@@ -259,27 +286,31 @@ const AllCustomer = () => {
                     </div>
                     <div className="modal-footer border-top pt-3">
                         <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseModal}>Đóng</button>
-                        {customer.id !== 0 ?
-                            <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
-                                onClick={() => updateCustomer(customer.id,
-                                    customer?.customerCode || '',
-                                    customer?.name || '',
-                                    customer?.email || '',
-                                    customer?.phone || '',
-                                    customer?.address || '',
-                                    customer?.tax || '')}
-                            >Lưu</button>
-                            :
-                            <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
-                                onClick={() =>
-                                    addCustomer(customer?.customerCode || '',
-                                        customer?.name || '',
-                                        customer?.email || '',
-                                        customer?.phone || '',
-                                        customer?.address || '',
-                                        customer?.tax || '')}
-                            >Tạo</button>
-                        }
+                        {userData.modifyCustomer === "True" ? (
+                            <>
+                                {customer.id !== 0 ?
+                                    <button type="button" className="btn btn-warning w-25 rounded-2 ms-1"
+                                        onClick={() => updateCustomer(customer.id,
+                                            customer?.customerCode || '',
+                                            customer?.name || '',
+                                            customer?.email || '',
+                                            customer?.phone || '',
+                                            customer?.address || '',
+                                            customer?.tax || '')}
+                                    >Lưu</button>
+                                    :
+                                    <button type="button" className="btn btn-success w-25 rounded-2 ms-1"
+                                        onClick={() =>
+                                            addCustomer(customer?.customerCode || '',
+                                                customer?.name || '',
+                                                customer?.email || '',
+                                                customer?.phone || '',
+                                                customer?.address || '',
+                                                customer?.tax || '')}
+                                    >Tạo</button>
+                                }
+                            </>
+                        ) : null}
                     </div>
                 </div>
             </Modal>
@@ -291,25 +322,45 @@ const AllCustomer = () => {
                 style={{
                     content: {
                         width: '600px',
-                        height: '220px',
+                        height: DelModalHeight(),
                         left: '35%',
                     },
                 }}
                 ariaHideApp={false}
             >
-                <div>
-                    <div className="modal-header border-bottom pb-3">
-                        <h1 className="modal-title fs-5">Xóa</h1>
-                        <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                {userData.modifyCustomer === "True" ? (<>
+                    <div>
+                        <div className="modal-header border-bottom pb-3">
+                            <h1 className="modal-title fs-5">Xóa</h1>
+                            <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body py-4">
+                            Bạn có chắc muốn xóa <span className='fw-bold'>{customer.name}</span>
+                        </div>
+                        <div className="modal-footer border-top pt-3">
+                            <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            <button onClick={() => deleteCustomer(customer.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
+                        </div>
                     </div>
-                    <div className="modal-body py-4">
-                        Bạn có chắc muốn xóa <span className='fw-bold'>{customer.name}</span>
-                    </div>
-                    <div className="modal-footer border-top pt-3">
-                        <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
-                        <button onClick={() => deleteCustomer(customer.id)} type="button" className="btn btn-danger w-25 rounded-2 ms-1">Xóa</button>
-                    </div>
-                </div>
+                </>) :
+                    (
+                        <div>
+                            <div className="modal-header border-bottom pb-3">
+                                <h1 className="modal-title fs-5">Xóa</h1>
+                                <button type="button" className="btn-close" onClick={handleCloseDelModal} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body py-4">
+                                <div className="alert alert-danger" role="alert">
+                                    Bạn không có quyền xóa khách hàng/nhà cung cấp
+                                </div>
+                            </div>
+                            <div className="modal-footer border-top pt-3">
+                                <button type="button" className="btn btn-outline-dark w-25 rounded-2" onClick={handleCloseDelModal}>Đóng</button>
+                            </div>
+                        </div>
+                    )
+                }
+
             </Modal>
         </section>
     );

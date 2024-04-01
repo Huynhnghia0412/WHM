@@ -1,16 +1,71 @@
 import React, { useState } from 'react'
 import Input from '../../components/Input'
-import { ILogin } from './../../interfaces/Interfaces';
+import { ILogin, IUserModel } from './../../interfaces/Interfaces';
 import inputHelper from '../../helper/InputHelper';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthServices from './../../services/Auth/AuthServices';
+import { useDispatch } from 'react-redux';
+import { setLoggedInUser } from '../../storage/Redux/userAuthSlice';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
     const [userLogin, setUserLogin] = useState<ILogin>();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    //error
+    const [passwordError, setPasswordError] = useState<string>('');
+    const [userNameError, setUserNameError] = useState<string>('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const updatedUserLogin = inputHelper(event, { ...userLogin });
         setUserLogin(updatedUserLogin);
+        setUserNameError('');
+        setPasswordError('');
     };
+
+    //add User
+    const login = (username: string, password: string) => {
+        AuthServices.login(username, password).then((res) => {
+            if (res.isSuccess) {
+                const token = res.result.token;
+                const { fullName, id, email, role,
+                    readInOutNote,
+                    modifyInOutNote,
+                    readWarehouse,
+                    modifyWarehouse,
+                    readProduct,
+                    modifyProduct,
+                    readProductType,
+                    modifyProductType,
+                    readCheckInventory,
+                    modifyCheckInventory,
+                    readCustomer,
+                    modifyCustomer, }: IUserModel = jwtDecode(token);
+                localStorage.setItem("token", token);
+                dispatch(setLoggedInUser(setLoggedInUser(
+                    {
+                        fullName, id, email, role,
+                        readInOutNote,
+                        modifyInOutNote,
+                        readWarehouse,
+                        modifyWarehouse,
+                        readProduct,
+                        modifyProduct,
+                        readProductType,
+                        modifyProductType,
+                        readCheckInventory,
+                        modifyCheckInventory,
+                        readCustomer,
+                        modifyCustomer,
+                    }
+                )));
+                navigate("/");
+            } else {
+                setUserNameError(res.Username);
+                setPasswordError(res.Password);
+            }
+        })
+    }
 
     return (
         <section className='py-5'>
@@ -25,35 +80,37 @@ const Login = () => {
                                     <Input
                                         label="Tài khoản:"
                                         placeholder=""
-                                        name='userName'
-                                        value={userLogin?.userName || ''}
-                                        onChange={() => handleInputChange}
+                                        name='username'
+                                        value={userLogin?.username || ''}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
+                                    {userNameError !== '' ? <span className='text-danger'>{userNameError}</span> : ''}
                                 </div>
                                 <div className='mt-3'>
                                     <Input
                                         label="Mật khẩu:"
                                         placeholder=""
-                                        name='passWord'
+                                        name='password'
                                         type='password'
-                                        value={userLogin?.passWord || ''}
-                                        onChange={() => handleInputChange}
+                                        value={userLogin?.password || ''}
+                                        onChange={(e) => handleInputChange(e)}
                                     />
+                                    {passwordError !== '' ? <span className='text-danger'>{passwordError}</span> : ''}
                                 </div>
                                 <div className='mt-3 text-center'>
-                                    <Link to={'/inWarehouse'} className='btn btn-primary'>Đăng nhập</Link>
+                                    <button className='btn btn-primary'
+                                        onClick={() => login(userLogin?.username || '', userLogin?.password || '')}
+                                    >Đăng nhập</button>
                                 </div>
                                 <hr />
                                 <div>
-                                    <Link to={'/resetPassWord'}>Quên mật khẩu?</Link>
+                                    <Link to={'/sendEmail'}>Quên mật khẩu?</Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </section>
     )
 }
