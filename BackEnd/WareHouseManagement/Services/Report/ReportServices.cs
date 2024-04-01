@@ -63,15 +63,22 @@ namespace WareHouseManagement.Services.Report
 				// Duyệt qua các sản phẩm để tính toán số lượng trong kho
 				foreach (var p in products)
 				{
-					int totalIn = await _unitOfWork.NoteItem.Get(x => x.ProductId == p.Id && x.Note.NoteCode.ToUpper().StartsWith("NK") && x.Note.NoteDate >= model.FromDate && x.Note.NoteDate <= model.ToDate, true)
+					int totalIn = await _unitOfWork.NoteItem
+						.Get(x => x.ProductId == p.Id && x.Note.NoteCode.ToUpper().StartsWith("NK") && x.Note.NoteDate >= model.FromDate && x.Note.NoteDate <= model.ToDate, true)
 						.SumAsync(x => x.Quantity);
 
-					int totalOut = await _unitOfWork.NoteItem.Get(x => x.ProductId == p.Id && x.Note.NoteCode.ToUpper().StartsWith("XK") && x.Note.NoteDate >= model.FromDate && x.Note.NoteDate <= model.ToDate, true)
+					int totalOut = await _unitOfWork.NoteItem
+						.Get(x => x.ProductId == p.Id && x.Note.NoteCode.ToUpper().StartsWith("XK") && x.Note.NoteDate >= model.FromDate && x.Note.NoteDate <= model.ToDate, true)
 						.SumAsync(x => x.Quantity);
 
 					p.QuantityInWareHouse = totalIn - totalOut;
 					res.Result.TotalQuantity += p.QuantityInWareHouse;
 					res.Result.TotalValue += p.QuantityInWareHouse * p.Price;
+
+					p.QuantityIn = totalIn;
+					p.QuantityOut = totalOut;
+					p.TotalValueIn = totalIn * p.Price;
+					p.TotalValueOut = totalOut * p.Price;
 				}
 			}
 

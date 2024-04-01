@@ -47,7 +47,8 @@ const InOutReport = () => {
                                             <th className='bg-body-tertiary'>Giá vốn</th>
                                             <th className='bg-body-tertiary'>Nhập</th>
                                             <th className='bg-body-tertiary'>Xuất</th>
-                                            <th className='bg-body-tertiary'>Giá trị N/X</th>
+                                            <th className='bg-body-tertiary'>Giá trị Nhập</th>
+                                            <th className='bg-body-tertiary'>Giá trị Xuất</th>
                                             <th className='bg-body-tertiary'>Tồn cuối kỳ</th>
                                         </tr>
                                     </thead>
@@ -59,9 +60,10 @@ const InOutReport = () => {
                                                 <td>{p.name}</td>
                                                 <td>{p.unit}</td>
                                                 <td>{UsefulFunctions.formatVNPrice(p.price)}</td>
-                                                <td>0</td>
-                                                <td>0</td>
-                                                <td>0</td>
+                                                <td>{p.quantityIn}</td>
+                                                <td>{p.quantityOut}</td>
+                                                <td>{UsefulFunctions.formatVNPrice(p.totalValueIn)}</td>
+                                                <td>{UsefulFunctions.formatVNPrice(p.totalValueOut)}</td>
                                                 <td>{UsefulFunctions.formatVNPrice(p.quantityInWareHouse)}</td>
                                             </tr>
                                         ))}

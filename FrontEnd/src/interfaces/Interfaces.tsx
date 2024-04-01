@@ -66,6 +66,10 @@ export interface IProduct {
     productTypeId: number;
     noteItems: string;
     quantityInWareHouse: number;
+    quantityIn: number;
+    quantityOut: number;
+    totalValueIn: number;
+    totalValueOut: number;
 }
 
 export interface IProductType {

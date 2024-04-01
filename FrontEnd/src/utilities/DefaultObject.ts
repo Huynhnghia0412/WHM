@@ -49,6 +49,10 @@ export const defaultProduct: IProduct = {
   productTypeId: 0,
   noteItems: "",
   quantityInWareHouse: 0,
+  quantityIn: 0,
+  quantityOut: 0,
+  totalValueIn: 0,
+  totalValueOut: 0,
 };
 
 export const defaultProductType: IProductType = {

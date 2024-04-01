@@ -29,5 +29,13 @@ namespace WareHouseManagement.Models
 
 		[NotMapped]
 		public int QuantityInWareHouse { get; set; }
+		[NotMapped]
+		public int QuantityIn { get; set; }
+		[NotMapped]
+		public int QuantityOut { get; set; }
+		[NotMapped]
+		public double TotalValueIn { get; set; }
+		[NotMapped]
+		public double TotalValueOut { get; set; }
 	}
 }
