@@ -167,7 +167,7 @@ const Product = () => {
         <div className='bg-white p-3'>
             <div className="row">
                 <div className="col">
-                    <h3 className='fw-bold'>Hàng hóa tồn kho</h3>
+                    <h3 className='fw-bold'>Hàng hóa</h3>
                 </div>
                 <div className="col text-end px-4">
                     <button className='btn btn-primary fw-bold' onClick={handleOpenModal}><i className="bi bi-plus-circle-dotted me-1"></i>Thêm mới</button>

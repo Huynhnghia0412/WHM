@@ -45,6 +45,7 @@ const AllWarehouseInventory = () => {
             cellRenderer: ALLInOutCustomButton,
             cellRendererParams: (params: any) => ({
                 data: params.data,
+                userData: userData,
                 handleOpenModalToDel: handleOpenModalToDel,
             }),
         },

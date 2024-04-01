@@ -29,7 +29,7 @@ const Navbar = () => {
                 </div>
                 <div className='ps-2 pe-4'>
                     <div className='border border bg-white navbar-hover'>
-                        <Link to={"product"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Tồn kho</Link>
+                        <Link to={"product"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Hàng hóa</Link>
                     </div>
                     <div className='border border-top-0 border bg-white navbar-hover'>
                         <Link to={"productType"} className='d-block m-0 text-decoration-none text-dark fw-bold py-2 px-4'>Loại hàng</Link>

@@ -34,7 +34,7 @@ const InventoryReport = () => {
                                 </p>
                             </div>
                             <div className='p-5'>
-                                <h5 className='fw-bold'>Loại hàng: </h5>
+                                <h5 className='fw-bold'>Loại hàng: {productType?.name}</h5>
                             </div>
                             <div>
                                 <table className='table table-bordered text-center'>
